@@ -13,12 +13,16 @@ public class ProductLine {
     private int id;
     private Product product;
     private int quantity;
+    private static int count;
 
     public ProductLine() {
+        count++;
+        this.id = count;
     }
 
-    public ProductLine(int id, Product product, int quantity) {
-        this.id = id;
+    public ProductLine(Product product, int quantity) {
+        count++;
+        this.id = count;
         this.product = product;
         this.quantity = quantity;
     }
@@ -26,11 +30,7 @@ public class ProductLine {
     public int getId() {
         return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    
     public Product getProduct() {
         return product;
     }

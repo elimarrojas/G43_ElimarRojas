@@ -18,15 +18,19 @@ public class Client {
     private String address;
     private String phone;
     private String email;
+    private static int count;
     
     private ArrayList<Account> accounts;
 
     public Client() {
+        count++;
+        this.idClient = count;
         this.accounts = new ArrayList<>();
     }
 
-    public Client(int idClient, String name, String address, String phone, String email) {
-        this.idClient = idClient;
+    public Client(String name, String address, String phone, String email) {
+        count++;
+        this.idClient = count;
         this.name = name;
         this.address = address;
         this.phone = phone;
@@ -36,10 +40,6 @@ public class Client {
 
     public int getIdClient() {
         return idClient;
-    }
-
-    public void setIdClient(int idClient) {
-        this.idClient = idClient;
     }
 
     public String getName() {

@@ -20,15 +20,20 @@ public class Order {
     private Account account;
     private boolean paid;
     private boolean accepted;
+    private static int count;
+    private int type;
 
     public Order() {
+        count++;
+        this.idOrder = count;
         this.productLine = new ArrayList<>();
         this.paid = false;
         this.accepted = false;              
     }
 
-    public Order(int idOrder, Date date, Client client, Account account, boolean paid, boolean accepted) {
-        this.idOrder = idOrder;
+    public Order(Date date, Client client, Account account, boolean paid, boolean accepted) {
+        count++;
+        this.idOrder = count;
         this.date = date;
         this.client = client;
         this.productLine = new ArrayList<>();
@@ -100,4 +105,21 @@ public class Order {
         }
         return result;
     }
+    
+    public int getTotalProducts(){
+        int result = 0;
+        for(ProductLine lineP : productLine ){
+            result += lineP.getQuantity();
+        }
+        return result;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }       
+    
 }
