@@ -3,15 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/Client.java</file>
-            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/Account.java</file>
-            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/Product.java</file>
-            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/ProductLine.java</file>
-            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/RETOIII_C2.java</file>
-            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/Order.java</file>
             <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/gui_pkg/GUI_Order.java</file>
+            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/Client.java</file>
+            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/Order.java</file>
             <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/gui_pkg/DialogCuentas.java</file>
+            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/Account.java</file>
             <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/Tienda.java</file>
+            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/RETOIII_C2.java</file>
+            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/ProductLine.java</file>
+            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/CompoundOrder.java</file>
+            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/SimpleOrder.java</file>
+            <file>file:/C:/Users/Daniel%20Fajardo/Documents/NetBeansProjects/RETOIII_C2/src/class_pkg/Product.java</file>
         </group>
     </open-files>
 </project-private>

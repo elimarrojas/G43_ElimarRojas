@@ -60,7 +60,6 @@ public class Product {
     @Override
     public String toString(){
         return "[" + this.code + "] - " + this.nameP;
-    }
-    
+    }   
     
 }

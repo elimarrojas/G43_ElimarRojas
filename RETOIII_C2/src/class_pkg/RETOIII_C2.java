@@ -18,7 +18,8 @@ public class RETOIII_C2 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new GUI_Order();
+        GUI_Order gui_Order = new GUI_Order();
+        
         
     }
     

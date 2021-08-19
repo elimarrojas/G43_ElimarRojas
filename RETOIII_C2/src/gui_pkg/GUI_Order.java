@@ -13,7 +13,6 @@ import class_pkg.Product;
 import class_pkg.ProductLine;
 import class_pkg.SimpleOrder;
 import class_pkg.Tienda;
-import java.awt.List;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,31 +26,33 @@ import javax.swing.table.DefaultTableModel;
 public class GUI_Order extends javax.swing.JFrame {
 
     private Tienda tienda;
-    private int filaSeleccionada;
+    private int rowSelected;
     private Product productSelected;
-    private ArrayList<ProductLine> line;
+    private ArrayList<ProductLine> lines;
     private int type;
     private ArrayList<SimpleOrder> simples;
     private CompoundOrder orderC;
     DefaultTableModel model = new DefaultTableModel();
+    
 
     /**
      * Creates new form GUI_Order
      */
-    public GUI_Order() {
-        initComponents();
-        tienda = new Tienda();
-        line = new ArrayList<>();
-        setVisible(true);
-        setLocationRelativeTo(null);
+    public GUI_Order() {        
+        this.tienda = new Tienda();
+        this.lines = new ArrayList<>();        
+        this.initComponents();
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        this.rowSelected = -1;
 
         this.type = 1;
         this.simples = new ArrayList<>();
         this.orderC = null;
-        this.pContain.setVisible(false);
+        this.pContain.setVisible(false);        
         this.btnEndOrder.setVisible(false);
-
-    }
+    }  
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -339,6 +340,11 @@ public class GUI_Order extends javax.swing.JFrame {
                 "Id", "Nombre", "Dirección", "Teléfono", "Email"
             }
         ));
+        tbClients.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbClientsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbClients);
 
         label1.setFont(new java.awt.Font("Dialog", 0, 11)); // NOI18N
@@ -947,17 +953,8 @@ public class GUI_Order extends javax.swing.JFrame {
             Client client = new Client(nameClient, addressClient, phoneClient, emailClient);
             tienda.getClients().add(client);
 
-            DefaultTableModel model = (DefaultTableModel) tbClients.getModel();
-            String[] fila = new String[5];
-            fila[0] = client.getIdClient() + "";
-            fila[1] = client.getName();
-            fila[2] = client.getAddress();
-            fila[3] = client.getPhone();
-            fila[4] = client.getEmail();
-            model.addRow(fila);
-            JOptionPane.showMessageDialog(this, "Se agregó el cliente exitosamente");
-            cbClients.addItem(client);
-            cbClientOrder.addItem(client);
+            tableClients();
+            JOptionPane.showMessageDialog(this, "Se agregó el cliente exitosamente");            
         }
         cleanFieldsClients();
 
@@ -968,37 +965,7 @@ public class GUI_Order extends javax.swing.JFrame {
         txtName.setText("");
         txtAddress.setText("");
         txtPhone.setText("");
-        txtEmail.setText("");
-    }
-
-    public void addToTableClient() {
-        Client client = new Client();
-        DefaultTableModel model = (DefaultTableModel) tbClients.getModel();
-        String[] fila = new String[5];
-        fila[0] = client.getIdClient() + "";
-        fila[1] = client.getName();
-        fila[2] = client.getAddress();
-        fila[3] = client.getPhone();
-        fila[4] = client.getEmail();
-        model.addRow(fila);
-
-//        String data[][] = new String[tienda.getClients().size()][5];
-//        String title[] = new String[5]; 
-//        title[0] = "ID";
-//        title[1] = "Nombre";
-//        title[2] = "Dirección";
-//        title[3] = "Teléfono";
-//        title[4] = "Email";
-//        
-//        for (int i = 0; i < tienda.getClients().size(); i++) {
-//            data[i][0] = tienda.getClients().get(i).getIdClient()+"";
-//            data[i][1] = tienda.getClients().get(i).getName();
-//            data[i][2] = tienda.getClients().get(i).getAddress();
-//            data[i][3] = tienda.getClients().get(i).getPhone();            
-//            data[i][4] = tienda.getClients().get(i).getEmail();            
-//        }
-//        model = new DefaultTableModel(data,title);
-
+        txtEmail.setText(""); 
     }//GEN-LAST:event_btnAddClientActionPerformed
 
     private void btnSearchClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchClientActionPerformed
@@ -1011,7 +978,6 @@ public class GUI_Order extends javax.swing.JFrame {
 
                 String nameClient = client.getName();
                 txtName.setText(nameClient);
-//                txtName.setText(this.tienda.getClients().get(fila).getId()+"");
 
                 String addressClient = client.getAddress();
                 txtAddress.setText(addressClient);
@@ -1021,6 +987,7 @@ public class GUI_Order extends javax.swing.JFrame {
 
                 String emailClient = client.getEmail();
                 txtEmail.setText(emailClient);
+                
 
                 codeFind = true;
             }
@@ -1036,6 +1003,7 @@ public class GUI_Order extends javax.swing.JFrame {
         boolean codeFind = false;
         for (Client client : tienda.getClients()) {
             if (codeSearch == client.getIdClient()) {
+                tienda.getClients().add(client);
                 String nameClient = txtName.getText();
                 String addressClient = txtAddress.getText();
                 String phoneClient = txtPhone.getText();
@@ -1045,8 +1013,8 @@ public class GUI_Order extends javax.swing.JFrame {
                 client.setAddress(addressClient);
                 client.setPhone(phoneClient);
                 client.setEmail(emailClient);
-
-                this.addToTableClient();
+                
+                tableClients();                
                 JOptionPane.showMessageDialog(this, "La información del cliente fue actualizada con éxito");
                 codeFind = true;
                 break;
@@ -1065,7 +1033,7 @@ public class GUI_Order extends javax.swing.JFrame {
             if (codeSearch == client.getIdClient()) {
                 this.tienda.getClients().remove(client);
                 cleanFieldsClients();
-                this.addToTableClient();
+                tableClients();
                 JOptionPane.showMessageDialog(this, "Se ha eliminado el cliente exitosamente");
                 codeFind = true;
                 break;
@@ -1077,39 +1045,34 @@ public class GUI_Order extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteClientActionPerformed
 
     private void btnAddAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAccountActionPerformed
-        // Agregar cuenta:
+        // Agregar cuenta a clientes:
         int numberA = Integer.parseInt(txtNumberA.getText());
         double balance = Double.parseDouble(txtBalance.getText());
         int tdc = Integer.parseInt(txtTdc.getText());
 
         Account account = new Account(numberA, balance, tdc);
         int position = cbClients.getSelectedIndex();
-        tienda.getClients().get(position).getAccounts().add(account);
-
-//        DefaultTableModel model = (DefaultTableModel) tb.getModel();
-//        String[] fila = new String[3];
-//        fila[0] = account.getNumberA() + "";
-//        fila[1] = account.getBalance()+"";
-//        fila[2] = account.getTdc()+"";        
-//        model.addRow(fila);
-        for (Client client : tienda.getClients()) {
-            System.out.println("Cliente" + client.getName());
-            for (Account account1 : client.getAccounts()) {
-                System.out.println("Saldo" + account1.getBalance());
-            }
-        }
-
-//        Client c = (Client) cbClientOrder.getItemAt(0);
-//        cbAccountOrder.removeAllItems();
-//        for (Account account2 = c.getAccounts()){
-//            cbAccountOrder.addItem(account2);
-//        }
+        tienda.getClients().get(position).getAccounts().add(account);        
         JOptionPane.showMessageDialog(this, "Se agregó la cuenta exitosamente");
         cbClients.addItem(account);
 
+        for (Client client : tienda.getClients()) {
+            System.out.println("Cliente " + client.getName());
+            for (Account account1 : client.getAccounts()) {
+                System.out.println("Saldo " + account1.getBalance());
+            }
+        }
+        //Agregando las cuentas de los clientes al combobox de la orden
+        //Para seleccionar la cuenta con la que se desea hacer el pago
+        Client c = (Client) cbClientOrder.getItemAt(0);
+        cbAccountOrder.removeAllItems();
+        for (Account account2 : c.getAccounts()){
+            cbAccountOrder.addItem(account2);
+        }        
+
         cleanFieldsAccount();
     }
-
+    //Método para limpiar los campos de Agregar Cuentas
     public void cleanFieldsAccount() {
         txtNumberA.setText("");
         txtBalance.setText("");
@@ -1118,7 +1081,10 @@ public class GUI_Order extends javax.swing.JFrame {
 
     private void btnAccountsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccountsActionPerformed
         // Visualizar las cuentas asociadas al cliente seleccionado:
-        Client client = this.tienda.getClients().get(filaSeleccionada);
+        //Botón Ver Cuentas
+        Client client = this.tienda.getClients().get(rowSelected);
+        System.out.println("Fila: " + rowSelected);
+        System.out.println("Cliente: " + tienda.getClients().get(rowSelected).getName());
         DialogCuentas cuentas = new DialogCuentas(this, true, client);
         cuentas.setVisible(true);
 
@@ -1126,13 +1092,13 @@ public class GUI_Order extends javax.swing.JFrame {
 
     private void btnDeleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteProductActionPerformed
         // TODO add your handling code here:
-        int codeSearch = Integer.parseInt(txtId.getText());
+        int codeSearch = Integer.parseInt(txtCode.getText());
         boolean codeFind = false;
         for (Product product : tienda.getProducts()) {
             if (codeSearch == product.getCode()) {
                 this.tienda.getProducts().remove(product);
                 cleanFieldsProducts();
-                this.addToTableProducts();
+                this.tableProducts();
                 JOptionPane.showMessageDialog(this, "Se ha eliminado el producto exitosamente");
                 codeFind = true;
                 break;
@@ -1156,8 +1122,9 @@ public class GUI_Order extends javax.swing.JFrame {
                 product.setNameP(nameP);
                 product.setPrice(price);
                 product.setStock(stock);
-
-                this.addToTableProducts();
+                
+                tienda.getProducts().add(product);
+                this.tableProducts();                
                 JOptionPane.showMessageDialog(this, "La información del producto fue actualizada con éxito");
                 codeFind = true;
                 break;
@@ -1175,7 +1142,7 @@ public class GUI_Order extends javax.swing.JFrame {
         for (Product product : tienda.getProducts()) {
             if (codeSearch == product.getCode()) {
                 tbProducts.setModel(model);
-
+                
                 String nameP = product.getNameP();
                 txtNameP.setText(nameP);
 
@@ -1183,7 +1150,7 @@ public class GUI_Order extends javax.swing.JFrame {
                 txtPrice.setText(price + "");
 
                 int stock = product.getStock();
-                txtStock.setText(stock + "");
+                txtStock.setText(stock + "");                
 
                 codeFind = true;
             }
@@ -1191,11 +1158,10 @@ public class GUI_Order extends javax.swing.JFrame {
         if (!codeFind) {
             JOptionPane.showMessageDialog(this, "No se encontró registro del producto consultado con el código " + codeSearch);
         }
-
     }//GEN-LAST:event_btnSearchProductActionPerformed
 
     private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
-        // TODO add your handling code here:
+        // Ingresa producto en stock:
         int code = Integer.parseInt(txtCode.getText());
         String nameP = txtNameP.getText();
         double price = Double.parseDouble(txtPrice.getText());
@@ -1205,20 +1171,15 @@ public class GUI_Order extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "El nombre del producto es requerido");
         } else {
             Product product = new Product(code, nameP, price, stock);
-            tienda.getProducts().add(product);
-
-            DefaultTableModel model = (DefaultTableModel) tbProducts.getModel();
-            String[] fila = new String[4];
-            fila[0] = product.getCode() + "";
-            fila[1] = product.getNameP();
-            fila[2] = product.getPrice() + "";
-            fila[3] = product.getStock() + "";
-            model.addRow(fila);
+            tienda.getProducts().add(product);         
+            
+            tableProducts();
             JOptionPane.showMessageDialog(this, "Se agregó el producto exitosamente");
         }
         cleanFieldsProducts();
     }//GEN-LAST:event_btnAddProductActionPerformed
-
+    
+    //Método para limpiar los campos que agregan un producto
     public void cleanFieldsProducts() {
         txtCode.setText("");
         txtNameP.setText("");
@@ -1252,7 +1213,7 @@ public class GUI_Order extends javax.swing.JFrame {
             fila[4] = prodLine.getSubtotal() + "";
             model.addRow(fila);
 
-            line.add(prodLine);
+            lines.add(prodLine);
 
             txtOrderProduct.setText("");
             lblOrderProduct.setText("");
@@ -1275,20 +1236,20 @@ public class GUI_Order extends javax.swing.JFrame {
             }
         }
         if (!found) {
-            lblOrderProduct.setText("No se encontró registro del producto");
+            lblOrderProduct.setText("Producto no encontrado");
         }
     }//GEN-LAST:event_txtOrderProductKeyTyped
 
     private void btnAddOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderActionPerformed
         // TODO add your handling code here:
         Order order = new Order();
-        order.setProductLine(line);
+        order.setLines(lines);
         order.setDate(Date.valueOf(txtDate.getText()));
         order.setClient((Client) cbClientOrder.getItemAt(cbClientOrder.getSelectedIndex()));
         order.setAccount((Account) cbAccountOrder.getItemAt(cbAccountOrder.getSelectedIndex()));
 
         if (this.type == 1) {
-            order.setCompoundOrder(null);
+            order.(null);
             tienda.getOrders().add(order);
 
             line = new ArrayList<>();
@@ -1352,11 +1313,28 @@ public class GUI_Order extends javax.swing.JFrame {
         for (Order order : this.tienda.getOrders()){
             if(order.getType()==1){
                 SimpleOrder simple = (SimpleOrder)order;
-                if(simple.get)
+                if(simple.getTotal() <= simple.getAccount().getBalance()){
+                    double resto = simple.getAccount().getBalance() - simple.getTotal();
+                    simple.getAccount().setBalance(resto);
+                    simple.setAccepted(true);
+                }
             }
             
         }
     }//GEN-LAST:event_btnStatusActionPerformed
+
+    private void tbClientsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbClientsMouseClicked
+        // TODO add your handling code here:
+        int row = tbClients.getSelectedRow(); 
+        if(row >= 0){
+            this.rowSelected = row;
+            txtId.setText(this.tienda.getClients().get(row).getIdClient()+"");
+            txtName.setText(this.tienda.getClients().get(row).getName());
+            txtAddress.setText(this.tienda.getClients().get(row).getAddress());
+            txtPhone.setText(this.tienda.getClients().get(row).getPhone());
+            txtEmail.setText(this.tienda.getClients().get(row).getEmail());            
+        }
+    }//GEN-LAST:event_tbClientsMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1392,6 +1370,42 @@ public class GUI_Order extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void tableClients(){
+        DefaultTableModel model = (DefaultTableModel)tbClients.getModel();
+        while(model.getRowCount()>0){
+            model.removeRow(0);
+        }
+        
+        String[] fila = new String[5];
+        for (Client client : this.tienda.getClients()) {
+            fila[0] = client.getIdClient()+"";
+            fila[1] = client.getName();
+            fila[2] = client.getAddress();
+            fila[3] = client.getPhone();
+            fila[4] = client.getEmail();
+            model.addRow(fila);            
+            cbClients.addItem(client);
+            cbClientOrder.addItem(client);            
+        }
+    }
+    
+    public void tableProducts(){
+        DefaultTableModel model = (DefaultTableModel)tbProducts.getModel();
+        while(model.getRowCount()>0){
+            model.removeRow(0);
+        }
+        
+        String[] fila = new String[4];
+        for (Product product : this.tienda.getProducts()) {
+            fila[0] = product.getCode()+"";
+            fila[1] = product.getNameP();
+            fila[2] = product.getPrice()+"";
+            fila[3] = product.getStock()+"";
+            model.addRow(fila);
+        }
+    }   
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAccounts;

@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Daniel Fajardo
  */
 public class DialogCuentas extends javax.swing.JDialog {
-    private Client client;
+    private static Client client;
 
     /**
      * Creates new form DialogCuentas
@@ -146,7 +146,7 @@ public class DialogCuentas extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                DialogCuentas dialog = new DialogCuentas(new javax.swing.JFrame(), true);
+                DialogCuentas dialog = new DialogCuentas(new javax.swing.JFrame(), true, client);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

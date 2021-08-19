@@ -16,7 +16,7 @@ public class Order {
     private int idOrder;
     private Date date;
     private Client client;
-    private ArrayList<ProductLine> productLine;
+    private ArrayList<ProductLine> lines;
     private Account account;
     private boolean paid;
     private boolean accepted;
@@ -26,7 +26,7 @@ public class Order {
     public Order() {
         count++;
         this.idOrder = count;
-        this.productLine = new ArrayList<>();
+        this.lines = new ArrayList<>();
         this.paid = false;
         this.accepted = false;              
     }
@@ -36,7 +36,7 @@ public class Order {
         this.idOrder = count;
         this.date = date;
         this.client = client;
-        this.productLine = new ArrayList<>();
+        this.lines = new ArrayList<>();
         this.account = account;
         this.paid = paid;
         this.accepted = accepted;
@@ -66,13 +66,13 @@ public class Order {
         this.client = client;
     }
 
-    public ArrayList<ProductLine> getProductLine() {
-        return productLine;
+    public ArrayList<ProductLine> getLines() {
+        return lines;
     }
 
-    public void setProductLine(ArrayList<ProductLine> productLine) {
-        this.productLine = productLine;
-    }   
+    public void setLines(ArrayList<ProductLine> lines) {
+        this.lines = lines;
+    }       
 
     public Account getAccount() {
         return account;
@@ -96,23 +96,7 @@ public class Order {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
-    }
-    
-    public double getTotal(){
-        double result = 0;
-        for(ProductLine lineP : productLine ){
-            result += lineP.getSubtotal();
-        }
-        return result;
-    }
-    
-    public int getTotalProducts(){
-        int result = 0;
-        for(ProductLine lineP : productLine ){
-            result += lineP.getQuantity();
-        }
-        return result;
-    }
+    }       
 
     public int getType() {
         return type;

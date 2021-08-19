@@ -6,47 +6,44 @@
 package class_pkg;
 
 import java.util.ArrayList;
-import java.util.Date;
-
 /**
  *
  * @author Daniel Fajardo
  */
 public class CompoundOrder extends Order{
-    private int id;
-    private static int count;
-    private ArrayList<Order> ordersC;
+    private int idOrder;    
+    private static int count;    
+    private ArrayList<SimpleOrder> ordersS;
     
 
     public CompoundOrder() {
+        count++;
+        this.idOrder = count;
+        this.ordersS = new ArrayList<>();
     }
 
-    public CompoundOrder(Date date, Client client, Account account, boolean paid, boolean accepted) {
-        super(date, client, account, paid, accepted);
+    public int getIdOrder() {
+        return idOrder;
     }
 
-    public int getId() {
-        return id;
+    public void setIdOrder(int idOrder) {
+        this.idOrder = idOrder;
+    }   
+
+    public ArrayList<SimpleOrder> getOrdersS() {
+        return ordersS;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public static int getCount() {
-        return count;
-    }
-
-    public static void setCount(int count) {
-        CompoundOrder.count = count;
-    }
-
-    public ArrayList<Order> getOrdersC() {
-        return ordersC;
-    }
-
-    public void setOrdersC(ArrayList<Order> ordersC) {
-        this.ordersC = ordersC;
+    public void setOrdersS(ArrayList<SimpleOrder> ordersS) {
+        this.ordersS = ordersS;
+    }    
+    
+    public double getTotal(){
+        double result = 0;
+        for(SimpleOrder simple : ordersS){
+            result += simple.getTotal();
+        }
+        return result;
     }    
         
 }
